@@ -19,25 +19,25 @@
 ** uvedenou datovou částí abstrakce tvoří abstraktní datový typ obousměrně
 ** vázaný lineární seznam:
 **
-**      DLL_Init ........... inicializace seznamu před prvním použitím,
-**      DLL_Dispose ........ zrušení všech prvků seznamu,
-**      DLL_InsertFirst .... vložení prvku na začátek seznamu,
-**      DLL_InsertLast ..... vložení prvku na konec seznamu,
-**      DLL_First .......... nastavení aktivity na první prvek,
-**      DLL_Last ........... nastavení aktivity na poslední prvek,
-**      DLL_GetFirst ....... vrací hodnotu prvního prvku,
-**      DLL_GetLast ........ vrací hodnotu posledního prvku,
-**      DLL_DeleteFirst .... zruší první prvek seznamu,
-**      DLL_DeleteLast ..... zruší poslední prvek seznamu,
-**      DLL_DeleteAfter .... ruší prvek za aktivním prvkem,
-**      DLL_DeleteBefore ... ruší prvek před aktivním prvkem,
-**      DLL_InsertAfter .... vloží nový prvek za aktivní prvek seznamu,
-**      DLL_InsertBefore ... vloží nový prvek před aktivní prvek seznamu,
-**      DLL_GetValue ....... vrací hodnotu aktivního prvku,
-**      DLL_SetValue ....... přepíše obsah aktivního prvku novou hodnotou,
-**      DLL_Previous ....... posune aktivitu na předchozí prvek seznamu,
-**      DLL_Next ........... posune aktivitu na další prvek seznamu,
-**      DLL_IsActive ....... zjišťuje aktivitu seznamu.
+**      DLL_Init ........... inicializace seznamu před prvním použitím,     #DONE
+**      DLL_Dispose ........ zrušení všech prvků seznamu,                   #
+**      DLL_InsertFirst .... vložení prvku na začátek seznamu,              #DONE
+**      DLL_InsertLast ..... vložení prvku na konec seznamu,                #DONE
+**      DLL_First .......... nastavení aktivity na první prvek,             #DONE
+**      DLL_Last ........... nastavení aktivity na poslední prvek,          #DONE
+**      DLL_GetFirst ....... vrací hodnotu prvního prvku,                   #
+**      DLL_GetLast ........ vrací hodnotu posledního prvku,                #
+**      DLL_DeleteFirst .... zruší první prvek seznamu,                     #
+**      DLL_DeleteLast ..... zruší poslední prvek seznamu,                  #
+**      DLL_DeleteAfter .... ruší prvek za aktivním prvkem,                 #
+**      DLL_DeleteBefore ... ruší prvek před aktivním prvkem,               #
+**      DLL_InsertAfter .... vloží nový prvek za aktivní prvek seznamu,     #
+**      DLL_InsertBefore ... vloží nový prvek před aktivní prvek seznamu,   #
+**      DLL_GetValue ....... vrací hodnotu aktivního prvku,                 #DONE
+**      DLL_SetValue ....... přepíše obsah aktivního prvku novou hodnotou,  #
+**      DLL_Previous ....... posune aktivitu na předchozí prvek seznamu,    #DONE
+**      DLL_Next ........... posune aktivitu na další prvek seznamu,        #DONE
+**      DLL_IsActive ....... zjišťuje aktivitu seznamu.                     #DONE
 **
 ** Při implementaci jednotlivých funkcí nevolejte žádnou z funkcí
 ** implementovaných v rámci tohoto příkladu, není-li u funkce explicitně
@@ -280,7 +280,10 @@ void DLL_InsertBefore( DLList *list, int data ) {
  * @param dataPtr Ukazatel na cílovou proměnnou
  */
 void DLL_GetValue( DLList *list, int *dataPtr ) {
-    if(!list->activeElement) DLL_Error();
+    if(!list->activeElement || !list) {
+        DLL_Error();
+        return; // added so compilator won't say "illegal operation" #TODO
+    }
     *dataPtr = list->activeElement->data;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
@@ -305,7 +308,8 @@ void DLL_SetValue( DLList *list, int data ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_Next( DLList *list ) {
-
+    if(!list) return;
+    list->activeElement = list->activeElement->nextElement;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
@@ -318,7 +322,8 @@ void DLL_Next( DLList *list ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_Previous( DLList *list ) {
-
+    if(!list) return;
+    list->activeElement = list->activeElement->previousElement;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
@@ -330,7 +335,7 @@ void DLL_Previous( DLList *list ) {
  *
  * @returns Nenulovou hodnotu v případě aktivity prvku seznamu, jinak nulu
  */
-int DLL_IsActive( DLList *list ) { // to FIX
+int DLL_IsActive( DLList *list ) {
     return (list->activeElement) ? 1 : 0;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
