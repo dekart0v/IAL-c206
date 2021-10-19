@@ -106,6 +106,20 @@ void DLL_Dispose( DLList *list ) {
  * @param data Hodnota k vložení na začátek seznamu
  */
 void DLL_InsertFirst( DLList *list, int data ) {
+    DLLElementPtr element = malloc(sizeof(struct DLLElement));
+    if (!element) DLL_Error();
+
+    element->data = data; //
+    element->nextElement = list->firstElement; // creating element to store it somewhere
+    element->previousElement = NULL; //
+
+    if(list->firstElement) { // does this if list has some data already (when list->firstElement != NULL)
+		list->firstElement->previousElement = element; // с нулевой позиции двигаем на первую и вставляем на место нулевое чето
+    }	
+	else { // ?????????
+		list->lastElement = element;
+	}
+	list->firstElement = element; // if list is empty
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
@@ -118,7 +132,20 @@ void DLL_InsertFirst( DLList *list, int data ) {
  * @param data Hodnota k vložení na konec seznamu
  */
 void DLL_InsertLast( DLList *list, int data ) {
+    DLLElementPtr element = malloc(sizeof(struct DLLElement));
+    if (!element) DLL_Error();
 
+    element->data = data; // the same as in DLL_InsertFirst() but inverted
+    element->nextElement = NULL;
+    element->previousElement = list->lastElement;
+
+    if(list->lastElement) { // does this if list has some data already (when list->firstElement != NULL)
+        list->lastElement->nextElement = element;
+    }
+    else { // ???????????
+        list->firstElement = element;
+    }
+    list->lastElement = element; //if list is empty
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
@@ -302,8 +329,8 @@ void DLL_Previous( DLList *list ) {
  *
  * @returns Nenulovou hodnotu v případě aktivity prvku seznamu, jinak nulu
  */
-int DLL_IsActive( DLList *list ) {
-    return (list->firstElement == NULL); // проверить еще
+int DLL_IsActive( DLList *list ) { // to FIX
+    return (list->activeElement) ? 1 : 0;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
