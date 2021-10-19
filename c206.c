@@ -280,7 +280,8 @@ void DLL_InsertBefore( DLList *list, int data ) {
  * @param dataPtr Ukazatel na cílovou proměnnou
  */
 void DLL_GetValue( DLList *list, int *dataPtr ) {
-
+    if(!list->activeElement) DLL_Error();
+    *dataPtr = list->activeElement->data;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
