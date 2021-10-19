@@ -156,8 +156,8 @@ void DLL_InsertLast( DLList *list, int data ) {
  *
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
-void DLL_First( DLList *list ) {
-
+void DLL_First( DLList *list ) { // simply assign smth to activeElement
+    list->activeElement = list->firstElement;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
@@ -168,8 +168,8 @@ void DLL_First( DLList *list ) {
  *
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
-void DLL_Last( DLList *list ) {
-
+void DLL_Last( DLList *list ) { // same as in DLL_First but inverted
+    list->activeElement = list->lastElement;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
