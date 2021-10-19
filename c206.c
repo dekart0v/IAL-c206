@@ -34,7 +34,7 @@
 **      DLL_InsertAfter .... vloží nový prvek za aktivní prvek seznamu,     #
 **      DLL_InsertBefore ... vloží nový prvek před aktivní prvek seznamu,   #
 **      DLL_GetValue ....... vrací hodnotu aktivního prvku,                 #DONE
-**      DLL_SetValue ....... přepíše obsah aktivního prvku novou hodnotou,  #
+**      DLL_SetValue ....... přepíše obsah aktivního prvku novou hodnotou,  #DONE
 **      DLL_Previous ....... posune aktivitu na předchozí prvek seznamu,    #DONE
 **      DLL_Next ........... posune aktivitu na další prvek seznamu,        #DONE
 **      DLL_IsActive ....... zjišťuje aktivitu seznamu.                     #DONE
@@ -296,7 +296,8 @@ void DLL_GetValue( DLList *list, int *dataPtr ) {
  * @param data Nová hodnota právě aktivního prvku
  */
 void DLL_SetValue( DLList *list, int data ) {
-
+    if(!list->activeElement) return;
+    list->activeElement->data = data;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
