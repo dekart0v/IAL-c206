@@ -181,7 +181,11 @@ void DLL_Last( DLList *list ) { // same as in DLL_First but inverted
  * @param dataPtr Ukazatel na cílovou proměnnou
  */
 void DLL_GetFirst( DLList *list, int *dataPtr ) {
-
+    if(!list->firstElement) {
+        DLL_Error();
+        return;
+    }
+    *dataPtr = list->firstElement->data;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
@@ -193,7 +197,11 @@ void DLL_GetFirst( DLList *list, int *dataPtr ) {
  * @param dataPtr Ukazatel na cílovou proměnnou
  */
 void DLL_GetLast( DLList *list, int *dataPtr ) {
-
+    if(!list->lastElement) {
+        DLL_Error();
+        return;
+    }
+    *dataPtr = list->lastElement->data;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
