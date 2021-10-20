@@ -29,7 +29,7 @@
 **      DLL_GetLast ........ vrací hodnotu posledního prvku,                #DONE
 **      DLL_DeleteFirst .... zruší první prvek seznamu,                     #DONE
 **      DLL_DeleteLast ..... zruší poslední prvek seznamu,                  #DONE
-**      DLL_DeleteAfter .... ruší prvek za aktivním prvkem,                 #
+**      DLL_DeleteAfter .... ruší prvek za aktivním prvkem,                 #DONE
 **      DLL_DeleteBefore ... ruší prvek před aktivním prvkem,               #
 **      DLL_InsertAfter .... vloží nový prvek za aktivní prvek seznamu,     #
 **      DLL_InsertBefore ... vloží nový prvek před aktivní prvek seznamu,   #
@@ -254,7 +254,21 @@ void DLL_DeleteLast( DLList *list ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_DeleteAfter( DLList *list ) {
+    if(!list) return;
+    if(list->activeElement == list->lastElement) return;
 
+    DLLElementPtr x = list->activeElement->nextElement;
+
+    if(x->nextElement) { // if we have smth after after activeElement
+        list->activeElement->nextElement = x->nextElement;
+        x = list->activeElement;
+    }
+    else { // end of list
+        list->activeElement->nextElement = NULL;
+        list->lastElement = list->activeElement;
+    }
+
+    free(x);
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
