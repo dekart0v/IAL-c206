@@ -25,10 +25,10 @@
 **      DLL_InsertLast ..... vložení prvku na konec seznamu,                #DONE
 **      DLL_First .......... nastavení aktivity na první prvek,             #DONE
 **      DLL_Last ........... nastavení aktivity na poslední prvek,          #DONE
-**      DLL_GetFirst ....... vrací hodnotu prvního prvku,                   #
-**      DLL_GetLast ........ vrací hodnotu posledního prvku,                #
-**      DLL_DeleteFirst .... zruší první prvek seznamu,                     #
-**      DLL_DeleteLast ..... zruší poslední prvek seznamu,                  #
+**      DLL_GetFirst ....... vrací hodnotu prvního prvku,                   #DONE
+**      DLL_GetLast ........ vrací hodnotu posledního prvku,                #DONE
+**      DLL_DeleteFirst .... zruší první prvek seznamu,                     #DONE
+**      DLL_DeleteLast ..... zruší poslední prvek seznamu,                  #DONE
 **      DLL_DeleteAfter .... ruší prvek za aktivním prvkem,                 #
 **      DLL_DeleteBefore ... ruší prvek před aktivním prvkem,               #
 **      DLL_InsertAfter .... vloží nový prvek za aktivní prvek seznamu,     #
@@ -213,7 +213,12 @@ void DLL_GetLast( DLList *list, int *dataPtr ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_DeleteFirst( DLList *list ) {
+    if(!list) return;
+    else if (list->firstElement == list->activeElement) return;
 
+    DLLElementPtr x = list->firstElement; // pointer to 1st element
+    free(x); // delete the pointer to the first element
+    list->firstElement = list->firstElement->nextElement; // make the next(2nd) element the first
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
@@ -225,7 +230,19 @@ void DLL_DeleteFirst( DLList *list ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_DeleteLast( DLList *list ) {
+    if(!list) return;		
+	if(list->lastElement == list->activeElement) return;
 
+	DLLElementPtr x = list->lastElement; // pointer to last element
+	list->lastElement = list->lastElement->previousElement; // make the previous element last element 
+	free(x); // delete the pointer to the last element
+	
+	if(!list->lastElement) { // if list is empty
+		return;
+	}
+    else { //if contains smth make the last element the last element (no links to the next node)
+		list->lastElement->nextElement = NULL;
+    }
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
