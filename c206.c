@@ -20,7 +20,7 @@
 ** vázaný lineární seznam:
 **
 **      DLL_Init ........... inicializace seznamu před prvním použitím,     #DONE
-**      DLL_Dispose ........ zrušení všech prvků seznamu,                   #?
+**      DLL_Dispose ........ zrušení všech prvků seznamu,                   #DONE
 **      DLL_InsertFirst .... vložení prvku na začátek seznamu,              #DONE
 **      DLL_InsertLast ..... vložení prvku na konec seznamu,                #DONE
 **      DLL_First .......... nastavení aktivity na první prvek,             #DONE
@@ -313,7 +313,7 @@ void DLL_DeleteBefore( DLList *list ) {
  */
 void DLL_InsertAfter( DLList *list, int data ) {
     if (list->activeElement != NULL) { //je kam vkládat
-        DLLElementPtr x = (DLLElementPtr *)malloc(sizeof(DLLElementPtr));
+        DLLElementPtr x = malloc(sizeof(DLLElementPtr));
         if (!x) DLL_Error(); //zkontrolovat úspěšnost malloc!
         x->data = data;
         x->nextElement = list->activeElement->nextElement;
@@ -341,7 +341,7 @@ void DLL_InsertAfter( DLList *list, int data ) {
  */
 void DLL_InsertBefore( DLList *list, int data ) {
     if (list->activeElement != NULL) { //je kam vkládat
-        DLLElementPtr x = (DLLElementPtr *)malloc(sizeof(DLLElementPtr));
+        DLLElementPtr x = malloc(sizeof(DLLElementPtr));
         if (!x) DLL_Error(); //zkontrolovat úspěšnost malloc!
         x->data = data;
         x->previousElement = list->activeElement->previousElement;
