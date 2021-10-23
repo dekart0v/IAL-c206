@@ -306,6 +306,21 @@ void DLL_DeleteBefore( DLList *list ) {
  * @param data Hodnota k vložení do seznamu za právě aktivní prvek
  */
 void DLL_InsertAfter( DLList *list, int data ) {
+    if (list->activeElement != NULL){ //je kam vkládat
+        DLLElementPtr x = (DLLElementPtr *)malloc(sizeof(DLLElementPtr));
+        //zkontrolovat úspěšnost malloc!
+        x->data = data;
+        x->nextElement = list->activeElement->nextElement;
+        x->previousElement = list->activeElement;
+        list->activeElement->nextElement = x; 
+        //navázání levého souseda na nový
+        if (list->activeElement == list->lastElement) { //vkládá za posledního
+            list->lastElement = x; //korekce ukazatele na konec
+        }
+        else { //navázání pravého souseda na vložený prvek
+            x->nextElement->previousElement = x;
+        } 
+    } //aktivní
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
