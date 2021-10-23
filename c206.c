@@ -30,9 +30,9 @@
 **      DLL_DeleteFirst .... zruší první prvek seznamu,                     #DONE
 **      DLL_DeleteLast ..... zruší poslední prvek seznamu,                  #DONE
 **      DLL_DeleteAfter .... ruší prvek za aktivním prvkem,                 #DONE
-**      DLL_DeleteBefore ... ruší prvek před aktivním prvkem,               #?
-**      DLL_InsertAfter .... vloží nový prvek za aktivní prvek seznamu,     #?
-**      DLL_InsertBefore ... vloží nový prvek před aktivní prvek seznamu,   #?
+**      DLL_DeleteBefore ... ruší prvek před aktivním prvkem,               #DONE   
+**      DLL_InsertAfter .... vloží nový prvek za aktivní prvek seznamu,     #DONE
+**      DLL_InsertBefore ... vloží nový prvek před aktivní prvek seznamu,   #DONE
 **      DLL_GetValue ....... vrací hodnotu aktivního prvku,                 #DONE
 **      DLL_SetValue ....... přepíše obsah aktivního prvku novou hodnotou,  #DONE
 **      DLL_Previous ....... posune aktivitu na předchozí prvek seznamu,    #DONE
@@ -306,9 +306,9 @@ void DLL_DeleteBefore( DLList *list ) {
  * @param data Hodnota k vložení do seznamu za právě aktivní prvek
  */
 void DLL_InsertAfter( DLList *list, int data ) {
-    if (list->activeElement != NULL){ //je kam vkládat
+    if (list->activeElement != NULL) { //je kam vkládat
         DLLElementPtr x = (DLLElementPtr *)malloc(sizeof(DLLElementPtr));
-        //zkontrolovat úspěšnost malloc!
+        if (!x) DLL_Error(); //zkontrolovat úspěšnost malloc!
         x->data = data;
         x->nextElement = list->activeElement->nextElement;
         x->previousElement = list->activeElement;
@@ -334,7 +334,21 @@ void DLL_InsertAfter( DLList *list, int data ) {
  * @param data Hodnota k vložení do seznamu před právě aktivní prvek
  */
 void DLL_InsertBefore( DLList *list, int data ) {
-
+    if (list->activeElement != NULL) { //je kam vkládat
+        DLLElementPtr x = (DLLElementPtr *)malloc(sizeof(DLLElementPtr));
+        if (!x) DLL_Error(); //zkontrolovat úspěšnost malloc!
+        x->data = data;
+        x->previousElement = list->activeElement->previousElement;
+        x->nextElement = list->activeElement;
+        list->activeElement->previousElement = x; 
+        //navázání levého souseda na nový
+        if (list->activeElement == list->firstElement) { //vkládá za posledního
+            list->firstElement = x; //korekce ukazatele na konec
+        }
+        else { //navázání pravého souseda na vložený prvek
+            x->previousElement->nextElement = x;
+        } 
+    } //aktivní
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
