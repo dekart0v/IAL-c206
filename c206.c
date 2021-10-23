@@ -20,7 +20,7 @@
 ** vázaný lineární seznam:
 **
 **      DLL_Init ........... inicializace seznamu před prvním použitím,     #DONE
-**      DLL_Dispose ........ zrušení všech prvků seznamu,                   #
+**      DLL_Dispose ........ zrušení všech prvků seznamu,                   #?
 **      DLL_InsertFirst .... vložení prvku na začátek seznamu,              #DONE
 **      DLL_InsertLast ..... vložení prvku na konec seznamu,                #DONE
 **      DLL_First .......... nastavení aktivity na první prvek,             #DONE
@@ -30,9 +30,9 @@
 **      DLL_DeleteFirst .... zruší první prvek seznamu,                     #DONE
 **      DLL_DeleteLast ..... zruší poslední prvek seznamu,                  #DONE
 **      DLL_DeleteAfter .... ruší prvek za aktivním prvkem,                 #DONE
-**      DLL_DeleteBefore ... ruší prvek před aktivním prvkem,               #
-**      DLL_InsertAfter .... vloží nový prvek za aktivní prvek seznamu,     #
-**      DLL_InsertBefore ... vloží nový prvek před aktivní prvek seznamu,   #
+**      DLL_DeleteBefore ... ruší prvek před aktivním prvkem,               #?
+**      DLL_InsertAfter .... vloží nový prvek za aktivní prvek seznamu,     #?
+**      DLL_InsertBefore ... vloží nový prvek před aktivní prvek seznamu,   #?
 **      DLL_GetValue ....... vrací hodnotu aktivního prvku,                 #DONE
 **      DLL_SetValue ....... přepíše obsah aktivního prvku novou hodnotou,  #DONE
 **      DLL_Previous ....... posune aktivitu na předchozí prvek seznamu,    #DONE
@@ -92,8 +92,10 @@ void DLL_Init( DLList *list ) {
  *
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
-void DLL_Dispose( DLList *list ) {
-
+void DLL_Dispose( DLList *list ) { // #TODO
+    list->activeElement = NULL;
+    list->firstElement = NULL;
+    list->lastElement = NULL;
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
@@ -258,7 +260,6 @@ void DLL_DeleteAfter( DLList *list ) {
     if(list->activeElement == list->lastElement) return;
 
     DLLElementPtr x = list->activeElement->nextElement;
-
     if(x->nextElement) { // if we have smth after after activeElement
         list->activeElement->nextElement = x->nextElement;
         x = list->activeElement;
@@ -267,7 +268,6 @@ void DLL_DeleteAfter( DLList *list ) {
         list->activeElement->nextElement = NULL;
         list->lastElement = list->activeElement;
     }
-
     free(x);
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
@@ -280,7 +280,19 @@ void DLL_DeleteAfter( DLList *list ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_DeleteBefore( DLList *list ) {
-
+    if (list->activeElement != NULL) {
+        if (list->activeElement->previousElement != NULL) { //Je co rušit? 
+            DLLElementPtr x = list->activeElement->previousElement; //ukazatel na rušený
+            list->activeElement->previousElement = x->previousElement; //překlenutí rušeného
+            if (x == list->firstElement) { //rušený první
+            list->firstElement = list->activeElement; //prvním bude aktivní
+            }
+            else { //prvek před zrušeným ukazuje doprava na Act
+            x->previousElement->nextElement = list->activeElement;
+        }
+        free(x);
+        } //je co rušit 
+    }
     //solved = FALSE; /* V případě řešení, smažte tento řádek! */
 }
 
